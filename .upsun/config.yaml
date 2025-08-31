@@ -24,15 +24,13 @@ services:
     db:
         type: 'mariadb:10.6'
     mongodb:
-        type: 'mongodb:6.0'
+        type: 'mongodb'
+        version: '6.0'  # Version spécifiée séparément
 
 routes:
-    # La route principale qui pointe vers votre application Symfony
     "https://api.main.{default}/":
         type: upstream
-        upstream: "app:http" # <-- CORRIGÉ : On utilise le nom de l'application 'app'
-
-    # La route qui redirige tout le trafic vers la route principale
+        upstream: "app:http"
     "https://{all}/":
         type: redirect
-        to: "https://api.main.{default}/" # <-- CORRIGÉ : La clé est 'to'
+        to: "https://api.main.{default}/"
