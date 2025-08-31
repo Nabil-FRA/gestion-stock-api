@@ -23,8 +23,7 @@ applications:
 services:
     db:
         type: 'mariadb:10.6'
-    mongodb:
-        type: 'mongodb:7.0'
+
 
 routes:
     "https://api.main.{default}/":
