@@ -1,0 +1,26 @@
+name: 'app'
+type: 'php:8.2'
+
+relationships:
+    database: 'db:mariadb'
+    mongodb: 'mongodb:mongodb'
+
+build:
+    flavor: composer
+
+web:
+    locations:
+        '/':
+            root: 'public'
+            passthru: '/index.php'
+
+disk: 512
+mounts:
+    '/var/cache': { source: 'local', source_path: 'cache' }
+    '/var/log': { source: 'local', source_path: 'log' }
+
+hooks:
+    build: |
+        php bin/console assets:install public
+    deploy: |
+        php bin/console doctrine:migrations:migrate --no-interaction
