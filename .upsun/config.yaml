@@ -23,9 +23,10 @@ applications:
 services:
     db:
         type: 'mariadb:10.6'
+        disk: 512
     mongodb:
-        type: 'mongodb'
-        version: '6.0'  # Version spécifiée séparément
+        type: 'mongodb-enterprise:6.0'
+        disk: 512
 
 routes:
     "https://api.main.{default}/":
