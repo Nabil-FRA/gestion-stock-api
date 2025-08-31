@@ -1,4 +1,3 @@
-# Le type d'application. C'est la clé obligatoire.
 applications:
     app:
         type: 'php:8.2'
@@ -12,6 +11,7 @@ applications:
                 '/':
                     root: 'public'
                     passthru: '/index.php'
+        # La taille du disque pour l'application se définit ici
         disk: 512
         mounts:
             '/var/cache': { source: 'local', source_path: 'cache' }
@@ -22,16 +22,17 @@ applications:
             deploy: |
                 php bin/console doctrine:migrations:migrate --no-interaction
 
-# La définition des services (bases de données)
 services:
     db:
         type: mariadb:10.6
+        # La taille du disque pour le service se définit ici
         disk: 512
     mongodb:
-        type: mongodb:6.0
+        # Le nom correct du service est "mongodb-csm"
+        type: mongodb-csm:6.0
+        # La taille du disque pour le service se définit ici
         disk: 512
 
-# La définition des routes
 routes:
     "https://api.main.{default}/":
         type: upstream
