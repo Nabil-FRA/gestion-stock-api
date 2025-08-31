@@ -1,3 +1,5 @@
+# .upsun/services.yaml
+
 db:
     type: mariadb:10.6
     disk: 512
