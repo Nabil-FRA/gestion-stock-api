@@ -11,7 +11,6 @@ applications:
                 '/':
                     root: 'public'
                     passthru: '/index.php'
-        # La taille du disque pour l'application se définit ici
         disk: 512
         mounts:
             '/var/cache': { source: 'local', source_path: 'cache' }
@@ -24,19 +23,21 @@ applications:
 
 services:
     db:
-        type: mariadb:10.6
-        # La taille du disque pour le service se définit ici
+        type: mariadb
+        version: '10.6'
         disk: 512
     mongodb:
-        # Le nom correct du service est "mongodb-csm"
-        type: mongodb-csm:6.0
-        # La taille du disque pour le service se définit ici
+        type: mongodb
+        version: '6.0'
         disk: 512
 
 routes:
+    # La route principale qui pointe vers votre application Symfony
     "https://api.main.{default}/":
         type: upstream
-        upstream: "app:http"
+        upstream: "app:http" # <-- CORRIGÉ : On utilise le nom de l'application 'app'
+
+    # La route qui redirige tout le trafic vers la route principale
     "https://{all}/":
         type: redirect
-        to: "https://api.main.{default}/"
+        to: "https://api.main.{default}/" # <-- CORRIGÉ : La clé est 'to'
