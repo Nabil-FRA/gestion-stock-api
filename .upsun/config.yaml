@@ -11,7 +11,6 @@ applications:
                 '/':
                     root: 'public'
                     passthru: '/index.php'
-        disk: 512
         mounts:
             '/var/cache': { source: 'local', source_path: 'cache' }
             '/var/log': { source: 'local', source_path: 'log' }
@@ -23,13 +22,9 @@ applications:
 
 services:
     db:
-        type: mariadb
-        version: '10.6'
-        disk: 512
+        type: 'mariadb:10.6'
     mongodb:
-        type: mongodb
-        version: '6.0'
-        disk: 512
+        type: 'mongodb:6.0'
 
 routes:
     # La route principale qui pointe vers votre application Symfony
