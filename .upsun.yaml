@@ -1,9 +1,0 @@
-# .upsun.yaml
-
-applications:
-    # Inclut la configuration de votre application Symfony
-    app: !include '.upsun/app.yaml'
-
-services: !include '.upsun/services.yaml'
-
-routes: !include '.upsun/routes.yaml'

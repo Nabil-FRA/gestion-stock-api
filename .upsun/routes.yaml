@@ -1,8 +1,0 @@
-"https://api.main.{default}/":
-    type: upstream
-    upstream: "app:http"
-    id: "main-api"
-
-"https://{all}/":
-    type: redirect
-    to: "https://api.main.{default}/"

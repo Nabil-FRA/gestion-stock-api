@@ -1,0 +1,41 @@
+# Le type d'application. C'est la clé obligatoire.
+applications:
+    app:
+        type: 'php:8.2'
+        relationships:
+            database: 'db:mariadb'
+            mongodb: 'mongodb:mongodb'
+        build:
+            flavor: composer
+        web:
+            locations:
+                '/':
+                    root: 'public'
+                    passthru: '/index.php'
+        disk: 512
+        mounts:
+            '/var/cache': { source: 'local', source_path: 'cache' }
+            '/var/log': { source: 'local', source_path: 'log' }
+        hooks:
+            build: |
+                php bin/console assets:install public
+            deploy: |
+                php bin/console doctrine:migrations:migrate --no-interaction
+
+# La définition des services (bases de données)
+services:
+    db:
+        type: mariadb:10.6
+        disk: 512
+    mongodb:
+        type: mongodb:6.0
+        disk: 512
+
+# La définition des routes
+routes:
+    "https://api.main.{default}/":
+        type: upstream
+        upstream: "app:http"
+    "https://{all}/":
+        type: redirect
+        to: "https://api.main.{default}/"
