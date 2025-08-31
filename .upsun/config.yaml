@@ -22,11 +22,9 @@ applications:
 
 services:
     db:
-        type: 'mariadb:10.6'
-        disk: 512
+        type: 'mariadb:10.6'  # Version intégrée dans le type
     mongodb:
-        type: 'mongodb-enterprise:6.0'
-        disk: 512
+        type: 'mongodb:6.0'   # Utilisation de mongodb avec version, sans enterprise
 
 routes:
     "https://api.main.{default}/":
