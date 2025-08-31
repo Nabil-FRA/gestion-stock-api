@@ -22,9 +22,9 @@ applications:
 
 services:
     db:
-        type: 'mariadb:10.6'  # Version intégrée dans le type
+        type: 'mariadb:10.6'
     mongodb:
-        type: 'mongodb:6.0'   # Utilisation de mongodb avec version, sans enterprise
+        type: 'mongodb:6.0'
 
 routes:
     "https://api.main.{default}/":
