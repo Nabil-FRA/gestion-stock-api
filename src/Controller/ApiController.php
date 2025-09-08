@@ -22,6 +22,8 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Response;
 use App\Document\MouvementLog;
 use App\Service\StockService;
+use App\Entity\User;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 #[Route('/api')]
@@ -275,5 +277,36 @@ class ApiController extends AbstractController
     {
         $logs = $dm->getRepository(MouvementLog::class)->findAll();
         return $this->json($logs);
+    }
+
+     #[Route('/users', name: 'api_users_new', methods: ['POST'])]
+    public function createUser(
+        Request $request,
+        SerializerInterface $serializer,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher
+    ): JsonResponse {
+        // On récupère le contenu de la requête (le JSON)
+        $jsonContent = $request->getContent();
+
+        // On "désérialise" le JSON pour créer un objet User
+        $user = $serializer->deserialize($jsonContent, User::class, 'json');
+
+        // On hache le mot de passe avant de le sauvegarder
+        $hashedPassword = $passwordHasher->hashPassword(
+            $user,
+            $user->getPassword() // On récupère le mot de passe en clair du JSON
+        );
+        $user->setPassword($hashedPassword);
+
+        // On définit un rôle par défaut si besoin
+        $user->setRoles(['ROLE_USER']);
+
+        // On sauvegarde le nouvel utilisateur en base de données
+        $em->persist($user);
+        $em->flush();
+
+        // On retourne l'utilisateur créé (sans le mot de passe) avec un statut 201
+        return $this->json($user, 201, [], ['groups' => 'user:read']);
     }
 }
