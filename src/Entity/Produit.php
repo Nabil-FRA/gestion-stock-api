@@ -27,19 +27,18 @@ class Produit
 
     #[ORM\Column]
     #[Groups(['product:read'])]
-    private ?int $seuil_d_alerte = null;
+    private ?int $seuilDAlerte = null; // CORRECTION : Convention de nommage
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['product:read'])]
-    private ?Categorie $categorie = null; // <-- CORRIGÉ : C majuscule
+    private ?Categorie $categorie = null;
 
     /**
-     * @var Collection<int, MouvmentStock>
+     * @var Collection<int, MouvementStock>
      */
-    #[ORM\OneToMany(targetEntity: MouvmentStock::class, mappedBy: 'produit')]
-
-    private Collection $mouvmentStocks;
+    #[ORM\OneToMany(targetEntity: MouvementStock::class, mappedBy: 'produit')]
+    private Collection $mouvementStocks; // CORRECTION : Typo
 
     /**
      * @var Collection<int, Fournisseur>
@@ -50,7 +49,7 @@ class Produit
 
     public function __construct()
     {
-        $this->mouvmentStocks = new ArrayCollection();
+        $this->mouvementStocks = new ArrayCollection(); // CORRECTION : Typo
         $this->fournisseurs = new ArrayCollection();
     }
 
@@ -67,7 +66,6 @@ class Produit
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -79,61 +77,55 @@ class Produit
     public function setReference(?string $reference): static
     {
         $this->reference = $reference;
-
         return $this;
     }
 
     public function getSeuilDAlerte(): ?int
     {
-        return $this->seuil_d_alerte;
+        return $this->seuilDAlerte;
     }
 
-    public function setSeuilDAlerte(int $seuil_d_alerte): static
+    public function setSeuilDAlerte(int $seuilDAlerte): static
     {
-        $this->seuil_d_alerte = $seuil_d_alerte;
-
+        $this->seuilDAlerte = $seuilDAlerte;
         return $this;
     }
 
-    public function getCategorie(): ?Categorie // <-- CORRIGÉ : C majuscule
+    public function getCategorie(): ?Categorie
     {
         return $this->categorie;
     }
 
-    public function setCategorie(?Categorie $categorie): static // <-- CORRIGÉ : C majuscule
+    public function setCategorie(?Categorie $categorie): static
     {
         $this->categorie = $categorie;
-
         return $this;
     }
 
     /**
-     * @return Collection<int, MouvmentStock>
+     * @return Collection<int, MouvementStock>
      */
-    public function getMouvmentStocks(): Collection
+    public function getMouvementStocks(): Collection // CORRECTION : Typo
     {
-        return $this->mouvmentStocks;
+        return $this->mouvementStocks; // CORRECTION : Typo
     }
 
-    public function addMouvmentStock(MouvmentStock $mouvmentStock): static
+    public function addMouvementStock(MouvementStock $mouvementStock): static // CORRECTION : Typo
     {
-        if (!$this->mouvmentStocks->contains($mouvmentStock)) {
-            $this->mouvmentStocks->add($mouvmentStock);
-            $mouvmentStock->setProduit($this);
+        if (!$this->mouvementStocks->contains($mouvementStock)) { // CORRECTION : Typo
+            $this->mouvementStocks->add($mouvementStock); // CORRECTION : Typo
+            $mouvementStock->setProduit($this);
         }
-
         return $this;
     }
 
-    public function removeMouvmentStock(MouvmentStock $mouvmentStock): static
+    public function removeMouvementStock(MouvementStock $mouvementStock): static // CORRECTION : Typo
     {
-        if ($this->mouvmentStocks->removeElement($mouvmentStock)) {
-            // set the owning side to null (unless already changed)
-            if ($mouvmentStock->getProduit() === $this) {
-                $mouvmentStock->setProduit(null);
+        if ($this->mouvementStocks->removeElement($mouvementStock)) { // CORRECTION : Typo
+            if ($mouvementStock->getProduit() === $this) {
+                $mouvementStock->setProduit(null);
             }
         }
-
         return $this;
     }
 
@@ -150,14 +142,12 @@ class Produit
         if (!$this->fournisseurs->contains($fournisseur)) {
             $this->fournisseurs->add($fournisseur);
         }
-
         return $this;
     }
 
     public function removeFournisseur(Fournisseur $fournisseur): static
     {
         $this->fournisseurs->removeElement($fournisseur);
-
         return $this;
     }
 }

@@ -26,15 +26,15 @@ class Localisation
     private ?string $adresse = null;
 
     /**
-     * @var Collection<int, MouvmentStock>
+     * @var Collection<int, MouvementStock>
      */
-    #[ORM\OneToMany(targetEntity: MouvmentStock::class, mappedBy: 'localisation')]
-    #[Groups(['location:read'])] // <-- L'ANNOTATION QUI MANQUAIT
-    private Collection $mouvmentStocks;
+    #[ORM\OneToMany(targetEntity: MouvementStock::class, mappedBy: 'localisation')] // CORRECTION : Typo
+    #[Groups(['location:read'])]
+    private Collection $mouvementStocks; // CORRECTION : Typo
 
     public function __construct()
     {
-        $this->mouvmentStocks = new ArrayCollection();
+        $this->mouvementStocks = new ArrayCollection(); // CORRECTION : Typo
     }
 
     public function getId(): ?int
@@ -50,7 +50,6 @@ class Localisation
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -62,37 +61,33 @@ class Localisation
     public function setAdresse(?string $adresse): static
     {
         $this->adresse = $adresse;
-
         return $this;
     }
 
     /**
-     * @return Collection<int, MouvmentStock>
+     * @return Collection<int, MouvementStock>
      */
-    public function getMouvmentStocks(): Collection
+    public function getMouvementStocks(): Collection // CORRECTION : Typo
     {
-        return $this->mouvmentStocks;
+        return $this->mouvementStocks; // CORRECTION : Typo
     }
 
-    public function addMouvmentStock(MouvmentStock $mouvmentStock): static
+    public function addMouvementStock(MouvementStock $mouvementStock): static // CORRECTION : Typo
     {
-        if (!$this->mouvmentStocks->contains($mouvmentStock)) {
-            $this->mouvmentStocks->add($mouvmentStock);
-            $mouvmentStock->setLocalisation($this);
+        if (!$this->mouvementStocks->contains($mouvementStock)) { // CORRECTION : Typo
+            $this->mouvementStocks->add($mouvementStock); // CORRECTION : Typo
+            $mouvementStock->setLocalisation($this);
         }
-
         return $this;
     }
 
-    public function removeMouvmentStock(MouvmentStock $mouvmentStock): static
+    public function removeMouvementStock(MouvementStock $mouvementStock): static // CORRECTION : Typo
     {
-        if ($this->mouvmentStocks->removeElement($mouvmentStock)) {
-            // set the owning side to null (unless already changed)
-            if ($mouvmentStock->getLocalisation() === $this) {
-                $mouvmentStock->setLocalisation(null);
+        if ($this->mouvementStocks->removeElement($mouvementStock)) { // CORRECTION : Typo
+            if ($mouvementStock->getLocalisation() === $this) {
+                $mouvementStock->setLocalisation(null);
             }
         }
-
         return $this;
     }
 }

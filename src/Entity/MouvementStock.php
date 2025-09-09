@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\MouvmentStockRepository;
+use App\Repository\MouvementStockRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: MouvmentStockRepository::class)]
-class MouvmentStock
+#[ORM\Entity(repositoryClass: MouvementStockRepository::class)]
+class MouvementStock // CORRECTION : Nom de la classe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,18 +25,18 @@ class MouvmentStock
 
     #[ORM\Column]
     #[Groups(['movement:read'])]
-    private ?\DateTime $date_mouvement = null;
+    private ?\DateTime $dateMouvement = null; // CORRECTION : Convention de nommage (camelCase)
 
-    #[ORM\ManyToOne(inversedBy: 'mouvmentStocks')]
+    #[ORM\ManyToOne(inversedBy: 'mouvementStocks')]
     #[Groups(['movement:read'])]
     private ?Produit $produit = null;
 
-    #[ORM\ManyToOne(inversedBy: 'mouvmentStocks')]
+    #[ORM\ManyToOne(inversedBy: 'mouvementStocks')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['movement:read'])]
     private ?Localisation $localisation = null;
 
-    #[ORM\ManyToOne(inversedBy: 'mouvmentStocks')]
+    #[ORM\ManyToOne(inversedBy: 'mouvementStocks')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['movement:read'])]
     private ?User $utilisateur = null;
@@ -54,7 +54,6 @@ class MouvmentStock
     public function setType(string $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
@@ -66,19 +65,17 @@ class MouvmentStock
     public function setQuantite(int $quantite): static
     {
         $this->quantite = $quantite;
-
         return $this;
     }
 
     public function getDateMouvement(): ?\DateTime
     {
-        return $this->date_mouvement;
+        return $this->dateMouvement;
     }
 
-    public function setDateMouvement(\DateTime $date_mouvement): static
+    public function setDateMouvement(\DateTime $dateMouvement): static
     {
-        $this->date_mouvement = $date_mouvement;
-
+        $this->dateMouvement = $dateMouvement;
         return $this;
     }
 
@@ -90,7 +87,6 @@ class MouvmentStock
     public function setProduit(?Produit $produit): static
     {
         $this->produit = $produit;
-
         return $this;
     }
 
@@ -102,7 +98,6 @@ class MouvmentStock
     public function setLocalisation(?Localisation $localisation): static
     {
         $this->localisation = $localisation;
-
         return $this;
     }
 
@@ -114,7 +109,6 @@ class MouvmentStock
     public function setUtilisateur(?User $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
-
         return $this;
     }
 }

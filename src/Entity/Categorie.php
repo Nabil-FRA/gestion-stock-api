@@ -25,7 +25,7 @@ class Categorie
      * @var Collection<int, Produit>
      */
     #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'categorie')]
-    #[Groups(['category:read'])] // <-- L'ANNOTATION QUI MANQUAIT
+    #[Groups(['category:read'])]
     private Collection $produits;
 
     public function __construct()
@@ -46,7 +46,6 @@ class Categorie
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -64,26 +63,16 @@ class Categorie
             $this->produits->add($produit);
             $produit->setCategorie($this);
         }
-
         return $this;
     }
 
     public function removeProduit(Produit $produit): static
     {
         if ($this->produits->removeElement($produit)) {
-            // set the owning side to null (unless already changed)
             if ($produit->getCategorie() === $this) {
                 $produit->setCategorie(null);
             }
         }
-
         return $this;
     }
-
-    public function setId(int $id): static
-{
-    $this->id = $id;
-
-    return $this;
-}
 }

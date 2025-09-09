@@ -29,7 +29,7 @@ class Fournisseur
      * @var Collection<int, Produit>
      */
     #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'fournisseurs')]
-    #[Groups(['supplier:read'])] // <-- L'ANNOTATION QUI MANQUAIT
+    #[Groups(['supplier:read'])]
     private Collection $produits;
 
     public function __construct()
@@ -50,7 +50,6 @@ class Fournisseur
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -62,7 +61,6 @@ class Fournisseur
     public function setContact(?string $contact): static
     {
         $this->contact = $contact;
-
         return $this;
     }
 
@@ -80,7 +78,6 @@ class Fournisseur
             $this->produits->add($produit);
             $produit->addFournisseur($this);
         }
-
         return $this;
     }
 
@@ -89,7 +86,6 @@ class Fournisseur
         if ($this->produits->removeElement($produit)) {
             $produit->removeFournisseur($this);
         }
-
         return $this;
     }
 }

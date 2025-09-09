@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'users')] // CORRECTION : Nom de la table
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -24,30 +25,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'movement:read'])]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     #[Groups(['user:read'])]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
-    // PAS DE GROUPE ICI, C'EST PARFAIT.
     private ?string $password = null;
 
     /**
-     * @var Collection<int, MouvmentStock>
+     * @var Collection<int, MouvementStock>
      */
-    #[ORM\OneToMany(targetEntity: MouvmentStock::class, mappedBy: 'utilisateur')]
-    #[Groups(['user:read'])] // <-- L'ANNOTATION QUI MANQUAIT
-    private Collection $mouvmentStocks;
+    #[ORM\OneToMany(targetEntity: MouvementStock::class, mappedBy: 'utilisateur')]
+    #[Groups(['user:read'])]
+    private Collection $mouvementStocks;
 
     public function __construct()
     {
-        $this->mouvmentStocks = new ArrayCollection();
+        $this->mouvementStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -63,45 +57,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -110,54 +86,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
     public function __serialize(): array
     {
         $data = (array) $this;
         $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
-
         return $data;
     }
 
     #[\Deprecated]
     public function eraseCredentials(): void
     {
-        // @deprecated, to be removed when upgrading to Symfony 8
     }
 
     /**
-     * @return Collection<int, MouvmentStock>
+     * @return Collection<int, MouvementStock>
      */
-    public function getMouvmentStocks(): Collection
+    public function getMouvementStocks(): Collection
     {
-        return $this->mouvmentStocks;
+        return $this->mouvementStocks;
     }
 
-    public function addMouvmentStock(MouvmentStock $mouvmentStock): static
+    public function addMouvementStock(MouvementStock $mouvementStock): static
     {
-        if (!$this->mouvmentStocks->contains($mouvmentStock)) {
-            $this->mouvmentStocks->add($mouvmentStock);
-            $mouvmentStock->setUtilisateur($this);
+        if (!$this->mouvementStocks->contains($mouvementStock)) {
+            $this->mouvementStocks->add($mouvementStock);
+            $mouvementStock->setUtilisateur($this);
         }
-
         return $this;
     }
 
-    public function removeMouvmentStock(MouvmentStock $mouvmentStock): static
+    public function removeMouvementStock(MouvementStock $mouvementStock): static
     {
-        if ($this->mouvmentStocks->removeElement($mouvmentStock)) {
-            // set the owning side to null (unless already changed)
-            if ($mouvmentStock->getUtilisateur() === $this) {
-                $mouvmentStock->setUtilisateur(null);
+        if ($this->mouvementStocks->removeElement($mouvementStock)) {
+            if ($mouvementStock->getUtilisateur() === $this) {
+                $mouvementStock->setUtilisateur(null);
             }
         }
-
         return $this;
     }
 }
